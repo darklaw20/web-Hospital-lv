@@ -198,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-            <i class="bi bi-hospital"></i>
+            <i class="bi bi-person-vcard"></i>
               <p>
                 Medicos
                 <i class="right fas fa-angle-left"></i>
@@ -220,6 +220,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
 
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+            <i class="bi bi-calendar-range"></i>
+              <p>
+                Horarios
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{url('admin/horarios/create')}}" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Creacion de Horarios</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('admin/horarios')}}" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>listado de Horarios</p>
+                </a>
+              </li>
+            </ul>
+          </li>
 
 
 

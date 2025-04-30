@@ -66,3 +66,13 @@ Route::get('/admin/medicos/{id}/confirm-delete',[App\Http\Controllers\MedicoCont
 Route::delete('/admin/medicos/{id}',[App\Http\Controllers\MedicoController::class,'destroy'])->name('admin.medicos.destroy')->middleware('auth');
 
 
+////rutas para horarios
+Route::get('admin/horarios',[App\Http\Controllers\HorarioController::class,'index'])->name('admin.horarios.index')->middleware('auth');
+Route::get('admin/horarios/create',[App\Http\Controllers\HorarioController::class,'create'])->name('admin.horarios.create')->middleware('auth');
+Route::post('admin/horarios/create',[App\Http\Controllers\HorarioController::class,'store'])->name('admin.horarios.store')->middleware('auth');
+Route::get('admin/horarios/{id}',[App\Http\Controllers\HorarioController::class,'show'])->name('admin.horarios.show')->middleware('auth');
+Route::get('admin/horarios/{id}/edit',[App\Http\Controllers\HorarioController::class,'edit'])->name('admin.horarios.edit')->middleware('auth');
+Route::put('admin/horarios/{id}',[App\Http\Controllers\HorarioController::class,'update'])->name('admin.horarios.update')->middleware('auth');
+Route::get('/admin/horarios/{id}/confirm-delete',[App\Http\Controllers\HorarioController::class,'confirmDelete'])->name('admin.horarios.confirmDelete')->middleware('auth');
+Route::delete('/admin/horarios/{id}',[App\Http\Controllers\HorarioController::class,'destroy'])->name('admin.horarios.destroy')->middleware('auth');
+

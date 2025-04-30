@@ -12,7 +12,7 @@ class Consultorio extends Model
     use HasFactory;
 protected $fillable = ['nombre','ubicacion','capacidad','telefono','especialidad','estado'];
 
-public function doctores(){
+public function medicos(){
     return $this->hasMany(Medico::class);
 }
 

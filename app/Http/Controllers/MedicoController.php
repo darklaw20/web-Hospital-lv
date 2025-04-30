@@ -24,7 +24,8 @@ class MedicoController extends Controller
      */
     public function create()
     {
-      return view('admin.medicos.create');
+        $medicos = Medico::all();
+      return view('admin.medicos.create',compact('medicos'));
     }
 
     /**

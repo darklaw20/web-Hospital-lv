@@ -26,7 +26,9 @@ class HorarioController extends Controller
     {
         $medicos = Medico::all();
         $consultorios = Consultorio::all();
-        return view('admin.horarios.create',compact('medicos','consultorios'));
+                $horarios = Horario::with('medico','consultorio')->get();
+
+        return view('admin.horarios.create',compact('medicos','consultorios','horarios'));
     }
 
     /**
@@ -34,11 +36,41 @@ class HorarioController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'dia' => 'required',
             'hora_inicio' => 'required',
             'hora_fin'=> 'required'
         ]);
+
+
+        //verificar si existe ya un horario para ese dia y rango de hora
+        $horarioExistente = Horario::where('dia',$request->dia)
+        ->where(function ($query) use ($request){
+            $query->where(function ($query) use ($request){
+                 $query->where('hora_inicio', '>=' ,$request->hora_inicio)
+                 ->where('hora_inicio', '<',$request->hora_fin);
+            })
+            ->orWhere(function ($query) use ($request){
+                $query->where('hora_fin', '>' ,$request->hora_inicio)
+                ->where('hora_inicio', '<=',$request->hora_fin);
+            })
+       ->orWhere(function ($query) use ($request){
+            $query->where('hora_inicio', '<' ,$request->hora_inicio)
+            ->where('hora_inicio', '>',$request->hora_fin);
+            });
+
+        }) ->exists();
+
+        if($horarioExistente){
+            return redirect()->back()->withInput()->with('mensaje','Ya existe un horario con los datos ingresados')->with('icono','error');
+
+
+        }
+
+
+
+
 
         Horario::create($request->all());
         return redirect()->route('admin.horarios.index')->with('mensaje','horario  registrado correctamente')->with('icono','success');

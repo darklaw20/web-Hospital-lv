@@ -48,13 +48,16 @@ class ConsultorioController extends Controller
         $consultorio->especialidad = $request->especialidad;
         $consultorio->estado = $request->estado;
         $consultorio->save();
-        return redirect()->route('admin.consultorios.index')->with('mensaje','paciente resgistrado correctamente')->with('icono','success');
+        return redirect()->route('admin.consultorios.index')->with('mensaje','consultorio resgistrado correctamente')->with('icono','success');
 
 
 
 
     }
 
+
+
+   
     /**
      * Display the specified resource.
      */

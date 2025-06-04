@@ -127,8 +127,8 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form group">
-                            <a href="{{url('admin/consultorios')}}" class="btn btn-secondary">cancelar</a>
-                              <button type="submit" class="btn btn-primary">Registrar Consultorio</button>
+                            <a href="{{url('admin/medicos')}}" class="btn btn-secondary">cancelar</a>
+                              <button type="submit" class="btn btn-primary">Registrar Medico</button>
                           </div>
                         </div>
                       </div>

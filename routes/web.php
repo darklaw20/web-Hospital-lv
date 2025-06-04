@@ -76,3 +76,5 @@ Route::put('admin/horarios/{id}',[App\Http\Controllers\HorarioController::class,
 Route::get('/admin/horarios/{id}/confirm-delete',[App\Http\Controllers\HorarioController::class,'confirmDelete'])->name('admin.horarios.confirmDelete')->middleware('auth');
 Route::delete('/admin/horarios/{id}',[App\Http\Controllers\HorarioController::class,'destroy'])->name('admin.horarios.destroy')->middleware('auth');
 
+//ruta para ajax
+Route::get('admin/horarios/consultorios/{id}',[App\Http\Controllers\HorarioController::class,'cargar_datos_consultorio'])->name('admin.horarios.cargar_datos_consultorio')->middleware('auth');

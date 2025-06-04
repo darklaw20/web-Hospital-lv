@@ -15,8 +15,9 @@ class HorarioController extends Controller
      */
     public function index()
     {
+        $consultorios = Consultorio::all();
         $horarios = Horario::with('medico','consultorio')->get();
-        return view('admin.horarios.index',compact('horarios'));
+        return view('admin.horarios.index',compact('horarios','consultorios'));
     }
 
     /**
@@ -40,12 +41,14 @@ class HorarioController extends Controller
         $request->validate([
             'dia' => 'required',
             'hora_inicio' => 'required',
-            'hora_fin'=> 'required'
+            'hora_fin'=> 'required',
+            'consultorio_id'=> 'required|exists:consultorios,id', //  validar que el consultorio exista
         ]);
 
 
         //verificar si existe ya un horario para ese dia y rango de hora
         $horarioExistente = Horario::where('dia',$request->dia)
+        ->where('consultorio_id', $request->consultorio_id) //filtrar por consultorio
         ->where(function ($query) use ($request){
             $query->where(function ($query) use ($request){
                  $query->where('hora_inicio', '>=' ,$request->hora_inicio)
@@ -82,6 +85,18 @@ class HorarioController extends Controller
     /**
      * Display the specified resource.
      */
+
+      public function cargar_datos_consultorio($id){
+       
+        try{
+            $horarios = Horario::with('medico','consultorio')->where('consultorio_id',$id)->get();
+            return view('admin.horarios.cargar_datos_consultorio',compact('horarios'));
+           
+
+        }catch(\Exception $exception){
+            return response()->json(['mensaje' => 'Error']);
+        }
+    }
     public function show($id)
     {
         
@@ -109,8 +124,29 @@ class HorarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Horario $horario)
+
+     public function confirmDelete($id){
+         $horario = Horario::with('medico','consultorio')->findOrFail($id);
+
+        return view('admin.horarios.delete', compact('horario'));
+
+
+
+     }
+    
+    public function destroy($id)
     {
         //
+        $horario = Horario::find($id);
+        //$medico = $horario->medico;
+        //$consultorio = $horario->consultorio;
+        //$medico->delete();
+        //$consultorio->delete();
+        //aqui solo se borra directo el horario porque no depende del id de otro esta en la cima de la consulta
+        $horario->delete();
+        return redirect()->route('admin.horarios.index')->with('mensaje','Se elimino el horario de manera correcta')->with('icono','success');
+
+
+
     }
 }

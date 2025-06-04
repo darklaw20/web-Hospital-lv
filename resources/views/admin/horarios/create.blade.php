@@ -84,7 +84,7 @@
                         <div class="col-md-12">
                           <div class="form group">
                               <label for="">Consultorio</label> 
-                              <select name="consultorio_id" class="form-control" id="">
+                              <select name="consultorio_id" class="form-control"id="consultorio_select">
                               @foreach($consultorios as $consultorio )
                                   <option value="{{$consultorio->id}}">{{$consultorio->nombre. " | " . $consultorio->ubicacion}}</option>
                                   @endforeach
@@ -92,6 +92,34 @@
                               </select>
                           </div>
                         </div>
+
+                         <script>
+                            $('#consultorio_select').on('change',function() {
+                                var consultorio_id = $('#consultorio_select').val();
+                                var url = "{{route('admin.horarios.cargar_datos_consultorio',':id')}}";
+                                   url = url.replace(':id',consultorio_id);
+                                if(consultorio_id){
+                                   
+                                   $.ajax(
+                                      {
+                                          url:  url,
+                                        type: 'GET',
+                                        success: function (data) {
+                                            $('#consultorio_info').html(data);
+                                        },
+                                        error: function (){
+                                            alert('error al obtener los datos del consultorio');
+
+                                        }
+                                      }
+
+                                    );
+                                } else{
+                                    $('#consultorio_info').html('');
+                                }
+                          });
+                        </script>
+                     
 
 
 
@@ -135,73 +163,8 @@
        
      
         <div class="card-body">
-
-        <table class="table table-striped table-hover table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Hora</th>
-                    <th>LUNES</th>
-                    <th>MARTES</th>
-                    <th>MIERCOLES</th>
-                    <th>JUEVES</th>
-                    <th>VIERNES</th>
-                    <th>SABADO</th>
-                    <th>DOMINGO</th>
-                   
-
-                </tr>
-
-            </thead>
-            <tbody>
-            @php
-    $horas = [
-        '08:00:00 - 09:00:00','09:00:00 - 10:00:00','10:00:00 - 11:00:00',
-        '11:00:00 - 12:00:00','12:00:00 - 13:00:00','13:00:00 - 14:00:00',
-        '14:00:00 - 15:00:00','15:00:00 - 16:00:00','16:00:00 - 17:00:00',
-        '17:00:00 - 18:00:00','18:00:00 - 19:00:00','19:00:00 - 20:00:00',
-        '20:00:00 - 21:00:00','21:00:00 - 22:00:00','22:00:00 - 23:00:00'
-    ];
-
-    $diasSemana = ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO'];
-@endphp
-
-@foreach($horas as $hora)
-    @php
-        list($hora_inicio, $hora_fin) = explode(' - ', $hora);
-        $hora_inicio_ts = strtotime($hora_inicio);
-        $hora_fin_ts = strtotime($hora_fin);
-    @endphp
-
-    <tr>
-        <td>{{ $hora }}</td>
-        @foreach($diasSemana as $dia)
-            @php
-                $nombre_doctor = '';
-
-                foreach ($horarios as $horario) {
-                    $dia_horario = strtoupper($horario->dia);
-                    $horario_inicio_ts = strtotime($horario->hora_inicio);
-                    $horario_fin_ts = strtotime($horario->hora_fin);
-
-                    if ($dia_horario == $dia &&
-                            $hora_inicio_ts < $horario_fin_ts &&
-                                        $hora_fin_ts > $horario_inicio_ts)
-                            {
-
-                        $nombre_doctor = $horario->medico->nombre . ' ' . $horario->medico->apellidos;
-                        break;
-                    }
-                }
-            @endphp
-            <td>{{ $nombre_doctor }}</td>
-        @endforeach
-    </tr>
-@endforeach
-
-            </tbody>
-        </table>
-        </div>
-
+   <div id="consultorio_info"></div>
+       
 
        
 

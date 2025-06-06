@@ -248,16 +248,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
           <li class="nav-item">
-            <a href class="nav-link" style="background-color:rgb(215, 40, 40);">
+            <a href="{{ route('logout') }}" class="nav-link" style="background-color:rgb(215, 40, 40);" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">>
+                                                      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
               
             <i class="bi bi-door-open"></i>
               <p>
 
                 Cerrar Session
+
                 
               </p>
             </a>
+
           </li>
+
+           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                   
+                                </div>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

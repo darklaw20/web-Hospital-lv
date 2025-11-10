@@ -1,22 +1,32 @@
-# Imagen base con PHP y Apache
+# Imagen base PHP 8.2 con Apache
 FROM php:8.2-apache
 
-# Instalar dependencias del sistema y extensiones PHP
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev zip git unzip libpq-dev && \
+    apt-utils \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    git \
+    unzip \
+    libpq-dev \
+    pkg-config && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install gd pdo_mysql pdo_pgsql zip
+    docker-php-ext-install gd pdo_mysql pdo_pgsql zip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos del proyecto
+# Copiar el proyecto Laravel
 COPY . /var/www/html
 
-# Cambiar DocumentRoot a la carpeta public
+# Cambiar DocumentRoot a public/
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Permisos de Laravel
+# Establecer permisos correctos para Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Activar mod_rewrite (necesario para las rutas de Laravel)
+# Habilitar mod_rewrite (requerido por Laravel)
 RUN a2enmod rewrite
 
 # Exponer puerto 80

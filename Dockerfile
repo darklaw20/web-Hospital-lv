@@ -17,8 +17,16 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install gd pdo_mysql pdo_pgsql zip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+
+
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # Copiar el proyecto Laravel
 COPY . /var/www/html
+
+RUN composer install --no-dev --optimize-autoloader
+
 
 # Cambiar DocumentRoot a public/
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf

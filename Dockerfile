@@ -42,3 +42,4 @@ EXPOSE 80
 
 # Comando por defecto
 CMD ["apache2-foreground"]
+CMD php artisan migrate --force && php-fpm

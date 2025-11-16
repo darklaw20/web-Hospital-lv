@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libpq-dev \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -23,7 +25,14 @@ WORKDIR /app
 
 COPY . .
 
+# Instalar Laravel
 RUN composer install --no-dev --optimize-autoloader
+
+# Instalar JS + build de Vite
+RUN npm install && npm run build
+
+# Permisos Laravel
+RUN chmod -R 777 storage bootstrap/cache
 
 EXPOSE 8080
 

@@ -1,33 +1,30 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
-# Instalar dependencias del sistema
+# Dependencias del sistema
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    libonig-dev \
     libzip-dev \
+    libonig-dev \
     zip \
     git \
     unzip \
     libpq-dev \
-    autoconf \
-    pkg-config \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
-# Configurar y compilar extensiones
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql pdo_pgsql zip
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+EXPOSE 8080
 
-CMD ["php-fpm"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
